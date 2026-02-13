@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nykaa Sale</title>
+
+  <style>
+    :root{
+      --bg:#fde2e4;
+      --card:#ffffff;
+      --accent:#ffafcc;
+      --accent2:#9d4edd;
+      --text:#5a189a;
+      --muted:#7a7a7a;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--bg);
+      font-family: Arial, sans-serif;
+      color:var(--text);
+    }
+
+    .card{
+      width:min(420px, 92vw);
+      background:var(--card);
+      border-radius:24px;
+      padding:22px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+      text-align:center;
+    }
+
+    h1,h2{ margin: 4px 0 12px; color:var(--accent2); }
+    p{ margin: 10px 0; line-height:1.35; }
+
+    .tag{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff0f6;
+      color:#a4133c;
+      font-size:12px;
+      margin-bottom:10px;
+      border:1px solid #ffd6e8;
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:12px 16px;
+      font-size:16px;
+      cursor:pointer;
+      width:100%;
+      margin-top:12px;
+    }
+    .primary{ background:var(--accent); color:var(--text); font-weight:700; }
+    .ghost{ background:#f2f2f2; color:#333; }
+
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid #ddd;
+      outline:none;
+      font-size:16px;
+      margin-top:10px;
+    }
+
+    .hint{ font-size:13px; color:var(--muted); margin-top:10px; }
+    .msg{ font-size:14px; margin-top:10px; min-height:18px; }
+
+    .row{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+
+    /* final yes/no */
+    #yesBtn{
+      background:var(--accent);
+      color:var(--text);
+      padding:14px 26px;
+      font-size:18px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    #noBtn{
+      background:#f2f2f2;
+      color:#333;
+      padding:10px 18px;
+      font-size:14px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      position:relative;
+    }
+
+    img{
+      width:min(320px, 90%);
+      border-radius:20px;
+      margin-top:14px;
+    }
+
+    a.linkbtn{
+      display:inline-block;
+      margin-top:12px;
+      padding:10px 18px;
+      background:var(--accent);
+      color:var(--text);
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:800;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card" id="app"></div>
+
+<script>
+  // ✅ EDIT THESE ONLY
+  const herName = "Siya";
+  const yourName = "Harshdeep";
+  const gifLink  = "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif";  // change if you want
+  const musicMp3 = "https://cdn.pixabay.com/audio/2022/03/15/audio_123456789.mp3"; // replace with your own mp3 link
+
+  // Acceptable answers for the “who irritates + loves you most” puzzle
+  const youAnswers = ["harshdeep", "harsh", "me"];
+
+  let step = 0;
+  let audio = null;
+
+  const puzzles = [
+    {
+      title: "Deal Unlock 1 🧁",
+      text: `Bakery warmup 😌\n\n"A perfect cake needs flour, sugar, and ____."`,
+      placeholder: "type one word",
+      accept: (v)=> v === "love",
+      hint: "Hint: it’s the main ingredient 😭"
+    },
+    {
+      title: "Deal Unlock 2 🍪",
+      text: `Ok cute one:\n\nLife is sweeter with cupcakes and ____ 💕`,
+      placeholder: `type ${herName.toLowerCase()}`,
+      accept: (v)=> v === herName.toLowerCase(),
+      hint: "Hint: literally your name 🥹"
+    },
+    {
+      title: "Deal Unlock 3 😭💗",
+      text: `Important question:\n\nWho irritates you the most... but loves you like crazy? 😌`,
+      placeholder: "type the name",
+      accept: (v)=> youAnswers.includes(v),
+      hint: "Hint: same person who made this page 😭"
+    }
+  ];
+
+  const app = document.getElementById("app");
+
+  function renderHome(){
+    app.innerHTML = `
+      <div class="tag">Limited Time • 60% OFF 👀</div>
+      <h1>Nykaa Sale</h1>
+      <p>Hey ${herName} 🌸</p>
+      <p>Tap to unlock the <b>real deal</b> 😈</p>
+      <button class="btn primary" onclick="start()">Start</button>
+      <p class="hint">PS: mobile friendly. no stress 😌</p>
+    `;
+  }
+
+  function start(){
+    step = 0;
+    renderPuzzle();
+  }
+
+  function renderPuzzle(){
+    const p = puzzles[step];
+    app.innerHTML = `
+      <h2>${p.title}</h2>
+      <p style="white-space:pre-line">${p.text}</p>
+
+      <input id="ans" placeholder="${p.placeholder}" />
+      <button class="btn primary" onclick="check()">Submit ✅</button>
+
+      <div class="msg" id="msg"></div>
+      <div class="hint">${p.hint}</div>
+    `;
+
+    const inp = document.getElementById("ans");
+    inp.focus();
+    inp.addEventListener("keydown", (e)=>{ if(e.key==="Enter") check(); });
+  }
+
+  function check(){
+    const v = document.getElementById("ans").value.trim().toLowerCase();
+    const msg = document.getElementById("msg");
+    const p = puzzles[step];
+
+    if(p.accept(v)){
+      msg.style.color = "#2e7d32";
+      msg.textContent = "Correct 😌 unlocking next...";
+      step++;
+      if(step < puzzles.length) setTimeout(renderPuzzle, 700);
+      else setTimeout(renderFinalAsk, 700);
+    } else {
+      msg.style.color = "#c1121f";
+      msg.textContent = "Nope 😭 try again.";
+    }
+  }
+
+  function renderFinalAsk(){
+    app.innerHTML = `
+      <div class="tag">Deal Unlocked ✅</div>
+      <h1>${herName}, will you be my Valentine? 💖</h1>
+      <p class="hint">Warning: the “No” button is shy 😈</p>
+
+      <div class="row">
+        <button id="yesBtn" onclick="yesClicked()">Yes 🥰</button>
+        <button id="noBtn" onmouseover="moveNo()">No</button>
+      </div>
+    `;
+  }
+
+  function moveNo(){
+    const noBtn = document.getElementById("noBtn");
+    const x = (Math.random()*200) - 100;
+    const y = (Math.random()*180) - 90;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  function yesClicked(){
+    // start music only after click (mobile browser rule)
+    if(!audio){
+      audio = new Audio(musicMp3);
+      audio.loop = true;
+      audio.volume = 0.7;
+      audio.play().catch(()=>{});
+    }
+
+    app.innerHTML = `
+      <h1>YAYYYY 💕</h1>
+      <p>
+        Pav bhaji ki kasam, kabhi dhokha nahi dunga 🥖❤️<br>
+        Happy Valentine’s Day 🌸<br>
+        — ${yourName}
+      </p>
+
+      <img src="${gifLink}" alt="valentine gif">
+
+      <a class="linkbtn"
+         href="https://open.spotify.com/search/Love%20Garage%20Arjan%20Dhillon"
+         target="_blank">
+         ▶ Play Love Garage 🎶
+      </a>
+
+      <button class="btn ghost" onclick="renderHome()">Back to start</button>
+      <p class="hint">(Music plays after you press Yes — normal phone rule)</p>
+    `;
+  }
+
+  renderHome();
+</script>
+</body>
+</html>
