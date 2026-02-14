@@ -16,7 +16,6 @@
 
     *{ box-sizing:border-box; }
 
-    /* Premium romantic background (not plain, not cheap) */
     body{
       margin:0;
       min-height:100vh;
@@ -30,60 +29,46 @@
         linear-gradient(180deg, #fff0f6 0%, #fde2e4 55%, #f8c6d8 100%);
       font-family: "Noto Sans Gurmukhi","Nirmala UI","Mukta Mahee",Arial,sans-serif;
       color:var(--text);
-      overflow-x:hidden;
+      overflow:hidden;
     }
 
-    /* English font: basic + romantic */
-    .eng{
-      font-family: Georgia, "Times New Roman", serif;
-      letter-spacing: 0.2px;
-    }
+    .eng{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.2px; }
 
-    /* Floating hearts layer */
+    /* Premium big hearts */
     .hearts-layer{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
     }
-
-    /* BIG premium hearts */
     .heart{
-      position: absolute;
-      width: 46px;
-      height: 46px;
-      opacity: 0.16;
+      position:absolute;
+      width:46px;
+      height:46px;
+      opacity:0.16;
       filter: blur(0.4px) drop-shadow(0 18px 30px rgba(0,0,0,0.12));
-      transform: translateZ(0);
       animation: driftUp linear forwards;
     }
-
     @keyframes driftUp{
-      from{
-        transform: translateY(40px) translateX(0) scale(0.9) rotate(0deg);
-        opacity: 0;
-      }
-      15%{ opacity: 0.16; }
-      to{
-        transform: translateY(-120vh) translateX(var(--dx)) scale(var(--sc)) rotate(var(--rot));
-        opacity: 0;
-      }
+      from{ transform: translateY(40px) translateX(0) scale(0.9) rotate(0deg); opacity:0; }
+      15%{ opacity:0.16; }
+      to{ transform: translateY(-120vh) translateX(var(--dx)) scale(var(--sc)) rotate(var(--rot)); opacity:0; }
     }
 
     .card{
-      position: relative;
-      z-index: 1;
-      width: min(560px, 92vw);
-      background: var(--card);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow: 0 18px 60px rgba(0,0,0,0.12);
-      text-align: center;
+      position:relative;
+      z-index:1;
+      width:min(560px, 92vw);
+      background:var(--card);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 18px 60px rgba(0,0,0,0.12);
+      text-align:center;
     }
 
-    h1,h2{ margin: 6px 0 10px; color: var(--accent2); }
-    p{ margin: 10px 0; line-height: 1.45; }
+    h1,h2{ margin:6px 0 10px; color:var(--accent2); }
+    p{ margin:10px 0; line-height:1.45; }
     .hint{ font-size:13px; color:var(--muted); margin-top:10px; }
 
     .textBox{
@@ -92,7 +77,6 @@
       background:#fff0f6;
       border:1px solid #ffd6e8;
       border-radius:18px;
-      color:var(--text);
       white-space:pre-line;
       font-size:15px;
       line-height:1.6;
@@ -105,7 +89,6 @@
       background:#fff0f6;
       border:1px solid #ffd6e8;
       border-radius:18px;
-      color:var(--text);
       white-space:pre-line;
       font-size:16px;
       line-height:1.65;
@@ -142,7 +125,6 @@
       font-weight:900;
       transition: transform 0.18s ease;
     }
-
     #noBtn{
       background:#f2f2f2;
       color:#333;
@@ -162,24 +144,51 @@
       border:1px solid #ffd6e8;
       background:#fff;
     }
-    .gifWrap img{
-      width:100%;
-      display:block;
+    .gifWrap img{ width:100%; display:block; }
+
+    /* If something breaks, show error nicely */
+    .err{
+      background:#fff0f0;
+      border:1px solid #ffb3c1;
+      color:#7a0c2e;
+      padding:12px 14px;
+      border-radius:14px;
+      text-align:left;
+      white-space:pre-wrap;
+      margin-top:10px;
+      font-size:14px;
     }
   </style>
 </head>
 
 <body>
   <div class="hearts-layer" id="hearts"></div>
-  <div class="card" id="app"></div>
+
+  <div class="card" id="app">
+    <!-- Fallback content so it never looks blank -->
+    <h1>Loading… ❤️</h1>
+    <p class="hint">If you still see this, the script didn’t run.</p>
+  </div>
 
 <script>
-  // ✅ Change names if needed
+(function(){
+  const app = document.getElementById("app");
+
+  // If any error happens, show it inside the card (so you can screenshot and tell me)
+  window.addEventListener("error", (e) => {
+    app.innerHTML = `
+      <h1>Oops 😬</h1>
+      <p class="hint">Your page loaded, but a script error happened.</p>
+      <div class="err">${String(e.message || e.error || e)}</div>
+      <p class="hint">Send me this error text and I’ll fix it instantly.</p>
+    `;
+  });
+
+  // ✅ Edit these if needed
   const herName = "Siyu";
   const yourName = "Chingu";
 
-  // ✅ Page 1 text
-  const introEnglish = Kuj lines tuhadi tareef ch❤️`;
+  const introEnglish = `I will not say you are beautiful, instead I would say: ❤️`;
   const introPunjabi = `ਤੇਰੀਆ ਅੱਖਾ, ਤੇਰੀਆ ਗਲਾਂ, ਤੇਰੇ ਬਾਲ, ਤੇਰੀ ਚਾਲ , ਤੇਰੇ ਝੁਮਕੇ, ਤੇਰੀ ਫੁਲਕਾਰੀ,
 ਮੈਂ ਵਾਦਾ ਕਰਦਾ ਮੈਂ ਕਢ ਦੇਣੀ ਆਪਣੀ ਜਿੰਦ ਤੇਰੀ ਨਾਲ ਸਾਰੀ,
 ਮੈਂ ਅੱਖ ਬੰਦ ਕਰਦਾ ਤੂੰ ਦਿਸੇ
@@ -187,26 +196,24 @@
 ਮੈਂ ਸਾਰੀ ਜਿੰਦਗੀ ਤੇਰੇ ਨਾਲ ਜਿਊਣੀ ਏ...।
 ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ... ਤੂੰ ਸਭ ਤੋਂ ਸੋਹਣੀ ਏ....❤️`;
 
-  // ✅ Page 2 shayari
   const shayariPage2 = `ਸਾਨੂੰ ਤੂੰ ਮਿਲਿਆ,
 ਸਾਡੀ ਰੂਹ ਰਜੱ ਗਈ,
 ਤੇਰਾ ਨਾਮ ਲੇਕੇ ਚੰਨਾ,
 ਸਾਡੀ ਜਿੰਦ ਸੱਜ ਗਈ।`;
 
-  // ✅ Page 2 YAY gif (you can replace with your own uploaded file e.g. "yay.gif")
+  // Use GIF (online). If you want to upload your own, set: const yayGif = "yay.gif";
   const yayGif = "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif";
 
-  const app = document.getElementById("app");
   let page = 1;
   let yesScale = 1;
 
   function render(){
-    if(page === 1) renderPage1();
-    else if(page === 2) renderPage2();
-    else renderPage3();
+    if(page === 1) page1();
+    else if(page === 2) page2();
+    else page3();
   }
 
-  function renderPage1(){
+  function page1(){
     app.innerHTML = `
       <h1>Valentine’s Day Special 💌</h1>
 
@@ -224,12 +231,13 @@
         </div>
       </div>
 
-      <button class="btn primary" onclick="next()">Next ➜</button>
+      <button class="btn primary" id="next1">Next ➜</button>
       <p class="hint">Bas ik hor page 😌</p>
     `;
+    document.getElementById("next1").onclick = () => { page = 2; render(); };
   }
 
-  function renderPage2(){
+  function page2(){
     app.innerHTML = `
       <h1>YAYYYY 💕</h1>
 
@@ -239,70 +247,65 @@
 
       <div class="shayariBox">${shayariPage2}</div>
 
-      <button class="btn primary" onclick="next()">Next ➜</button>
+      <button class="btn primary" id="next2">Next ➜</button>
       <p class="hint">Hun last page aa… 😈</p>
     `;
+    document.getElementById("next2").onclick = () => { page = 3; render(); };
   }
 
-  function renderPage3(){
+  function page3(){
     yesScale = 1;
     app.innerHTML = `
       <h1>${herName}… 💖</h1>
       <h2 style="margin-top:6px;">ਕੀ ਤੂੰ ਮੇਰੀ ਵੇਲਨਟਾਈਨ ਬਣੇਗੀ? 💌</h2>
-      
+      <p class="hint">“ਨਹੀਂ” ਥੋੜ੍ਹਾ ਸ਼ਰਮੀਲਾ ਆ 😈</p>
 
       <div class="navRow">
-        <button id="yesBtn" onclick="yesClicked()">ਹਾਂ 🥰</button>
-        <button id="noBtn" onmouseover="noTried()" onclick="noTried()" ontouchstart="noTried()">ਨਹੀਂ</button>
+        <button id="yesBtn">ਹਾਂ 🥰</button>
+        <button id="noBtn">ਨਹੀਂ</button>
       </div>
 
-      <button class="btn ghost" onclick="back()">⬅ Back</button>
+      <button class="btn ghost" id="backBtn">⬅ Back</button>
     `;
-  }
 
-  function next(){
-    page = Math.min(3, page + 1);
-    render();
-  }
+    document.getElementById("backBtn").onclick = () => { page = 2; render(); };
 
-  function back(){
-    page = Math.max(1, page - 1);
-    render();
-  }
+    document.getElementById("yesBtn").onclick = () => {
+      app.innerHTML = `
+        <h1>Hehe 😌❤️</h1>
+        <p style="font-size:18px;margin-top:6px;">
+          Pav bhaji di kasam, kade dhokha nahi dunga 🥖❤️<br>
+          — <span class="eng" style="font-weight:800;">${yourName}</span>
+        </p>
+        <div class="shayariBox">${shayariPage2}</div>
+        <button class="btn primary" id="restart">Back to Start</button>
+      `;
+      document.getElementById("restart").onclick = () => { page = 1; render(); };
+    };
 
-  function noTried(){
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
-    if(!noBtn || !yesBtn) return;
 
-    const x = (Math.random()*220) - 110;
-    const y = (Math.random()*160) - 80;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    function noTried(){
+      const x = (Math.random()*220) - 110;
+      const y = (Math.random()*160) - 80;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
 
-    yesScale += 0.22;
-    yesBtn.style.transform = `scale(${yesScale})`;
+      yesScale += 0.22;
+      yesBtn.style.transform = `scale(${yesScale})`;
 
-    if(yesScale >= 2.2){
-      noBtn.style.opacity = "0";
-      noBtn.style.pointerEvents = "none";
+      if(yesScale >= 2.2){
+        noBtn.style.opacity = "0";
+        noBtn.style.pointerEvents = "none";
+      }
     }
+
+    noBtn.onmouseover = noTried;
+    noBtn.onclick = noTried;
+    noBtn.ontouchstart = noTried;
   }
 
-  function yesClicked(){
-    app.innerHTML = `
-      <h1>Hehe 😌❤️</h1>
-
-      <p style="font-size:18px;margin-top:6px;">
-        Pav bhaji di kasam, kabhi dhokha nahi dunga 🥖❤️<br>
-        — <span class="eng" style="font-weight:800;">${yourName}</span>
-      </p>
-
-      <div class="shayariBox">${shayariPage2}</div>
-
-      <button class="btn primary" onclick="page=1; render()">Back to Start</button>
-    `;
-  }
-
+  // Big premium hearts (few + slow)
   function spawnHearts(batch = 6){
     const layer = document.getElementById("hearts");
     if(!layer) return;
@@ -321,8 +324,8 @@
 
       const left = Math.random()*100;
       const delay = Math.random()*2.2;
-      const duration = 14 + Math.random()*14;   // slow & premium
-      const size = 38 + Math.random()*34;       // BIG hearts 38-72px
+      const duration = 14 + Math.random()*14;
+      const size = 38 + Math.random()*34;
       const dx = (Math.random()*140 - 70).toFixed(0) + "px";
       const sc = (0.9 + Math.random()*0.8).toFixed(2);
       const rot = (Math.random()*90 - 45).toFixed(0) + "deg";
@@ -341,14 +344,17 @@
       setTimeout(()=>h.remove(), (delay+duration)*1000 + 300);
     }
 
-    setTimeout(()=>spawnHearts(2), 1600); // few hearts = classy
+    setTimeout(()=>spawnHearts(2), 1600);
   }
 
+  // Run
   spawnHearts(6);
   render();
+})();
 </script>
 </body>
 </html>
+
 
 
 
